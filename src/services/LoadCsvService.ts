@@ -57,15 +57,20 @@ class LoadCsvService {
                 ]
             }
 
-            const addListResponse = await hubspotClient.apiRequest({
-                method: 'POST',
-                path: `/contacts/v1/lists/${listId}/add/?hapikey=${config.api_key}`,
-                body: contactListProperties
-            });
+            try {
+                const addListResponse = await hubspotClient.apiRequest({
+                    method: 'POST',
+                    path: `/contacts/v1/lists/${listId}/add/?hapikey=${config.api_key}`,
+                    body: contactListProperties
+                });
+
+            }catch(err) {
+                console.log(err);
+            }
 
         })
         .on('end', () => {
-            console.log('Contatos criados e associados a lista');
+            console.log('Importação finalizada');
         });
 
         return true;
