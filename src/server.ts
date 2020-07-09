@@ -7,24 +7,26 @@ const app = express();
 
 app.use(express.json());
 
-
 const contactList = new VerifyContactList();
+
 contactList.execute().then(function(data) {
- 
-  const { type, listId } = data;
+
+  const { name, type, listId } = data;
 
   if(type == 'new') {
+    console.log( `Lista criada: ${name}`);
+
     const loadList = new LoadCsvService();
     loadList.execute({listId:listId});
   }
 
 });
 
+app.get('/', function(request, response) {
+  return response.json({'Message': 'User /contacts endpoint to list contacts grouped by domain'});
+});
 
-
-
-
-//app.get('/contacts', contacts);
+app.get('/contacts', contacts);
 
 app.listen(3333, () => {
   console.log('Axur server started');

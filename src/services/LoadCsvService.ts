@@ -1,57 +1,74 @@
-import csv from 'csv-parser';
+
 import fs from 'fs';
 import path from 'path';
 import * as hubspot from '@hubspot/api-client';
 import { config } from '../config';
-
+import csv from 'csv-parser';
 
 interface Request {
-    fileName: string;    
+    listId: number;
 }
 
 class LoadCsvService {
 
-    public async execute({fileName}:Request) {
+    public async execute({listId}:Request) {
 
-      const filePath = path.resolve(__dirname, '..', 'data' );
+        const hubspotClient = new hubspot.Client({ apiKey: config.api_key });
 
-      const hubspotClient = new hubspot.Client({ apiKey: config.api_key })
-      const importRequest = {
-          name: 'LISTA RAFAEL',
-          files: [
-              {
-                  fileName: fileName,
-                  fileImportPage: {
-                      hasHeader: true,
-                      columnMappings: [
-                          {
-                              columnName: 'First Name',
-                              propertyName: 'firstname',
-                              columnObjectType: 'CONTACT',
-                          },
-                          {
-                            columnName: 'Last Name',
-                            propertyName: 'lastname',
-                            columnObjectType: 'CONTACT',
-                          },
-                          {
-                              columnName: 'Email',
-                              propertyName: 'email',
-                              columnObjectType: 'CONTACT',
-                          },
-                      ],
-                  },
-              },
-          ],
-      }
+        const fileName = config.csv_load_file;
+        
+        const filePath = path.resolve(__dirname, '..', 'data' );
 
-      const importFilePath = `${filePath}/${fileName}`
-      const importFileReadStream = fs.createReadStream(importFilePath)
-      const result = await hubspotClient.crm.imports.coreApi.create(JSON.stringify(importRequest), importFileReadStream)
-      
-      console.log('Contatos Carregados');
-      console.log(JSON.stringify(result.body))
+        fs.createReadStream(`${filePath}/${fileName}`)
+        .pipe(csv())
+        .on('data', async (row) => {
 
+            const contactProperties = {
+                "properties": [
+                {
+                    "property": "email",
+                    "value": row.email
+                },
+                {
+                    "property": "firstname",
+                    "value": row.first_name
+                },
+                {
+                    "property": "lastname",
+                    "value": row.last_name
+                },
+                {
+                    "property": "gender",
+                    "value": row.gender
+                },
+            ]};
+
+            const createResponse = await hubspotClient.apiRequest({
+                method: 'POST',
+                path: `/contacts/v1/contact/?hapikey=${config.api_key}`,
+                body: contactProperties,
+            });
+
+            const { vid } = createResponse.body;
+
+            const contactListProperties = {
+                "vids": [
+                    vid
+                ]
+            }
+
+            const addListResponse = await hubspotClient.apiRequest({
+                method: 'POST',
+                path: `/contacts/v1/lists/${listId}/add/?hapikey=${config.api_key}`,
+                body: contactListProperties
+            });
+
+        })
+        .on('end', () => {
+            console.log('Contatos criados e associados a lista');
+        });
+
+        return true;
     }
 
 }
