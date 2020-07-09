@@ -14,15 +14,15 @@ $ yarn
 ```
 # Estrutura do projeto
 
-├── install-notes.txt  - Este Arquivo;
-├── package.json       - Detalhes do projeto, dependências e scripts de inicialização;
-├── src                - Fonte do projeto
-│   ├── config         - Arquivo de configuração
-│   ├── data           - Arquivos de importação CSV
-│   ├── server.ts      - Processo principal
-│   └── services       - Serviços externos (API)
-├── tsconfig.json      - Definições do typescript
-└── yarn.lock          - Definições de versões dos pacotes
+├── install-notes.txt  - Este Arquivo;  
+├── package.json       - Detalhes do projeto, dependências e scripts de inicialização;  
+├── src                - Fonte do projeto;  
+│   ├── config         - Arquivo de configuração;  
+│   ├── data           - Arquivos de importação CSV;  
+│   ├── server.ts      - Processo principal;  
+│   └── services       - Serviços externos (API);  
+├── tsconfig.json      - Definições do typescript;  
+└── yarn.lock          - Definições de versões dos pacotes;  
 
 # Configuração do ambiente
 
