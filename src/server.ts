@@ -8,24 +8,28 @@ const app = express();
 app.use(express.json());
 
 const contactList = new VerifyContactList();
+
 contactList.execute().then(function(data) {
   const { name, type, listId } = data;
   if(type == 'new') {
     console.log(`Lista criada! \nId:${listId} Nome:${name}`);
     const loadList = new LoadCsvService();
-    loadList.execute({listId:listId});
+    loadList.execute( {listId:listId} );
   }
 });
 
-app.get('/', function(request, response) {
-  return response.json({'Message': 'Use /contacts endpoint to list contacts grouped by domain'});
-});
-
-app.get('/contacts', async function(request, response) {
+app.get('/contacts', async function(request: Request, response: Response) {
   
   const loadApiContacts =  new LoadApiContacts();
   const result = await loadApiContacts.execute();
   return response.json(result);
+
+});
+
+app.get('/', function(request: Request, response: Response) {
+  
+  return response.json({'Message': 'Use /contacts endpoint to list contacts grouped by domain'});
+
 });
 
 app.listen(3333, () => {
