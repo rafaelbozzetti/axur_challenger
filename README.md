@@ -41,10 +41,10 @@ $ yarn
 $ yarn server
 ```
 
-Ao iniciar o projeto é consultado via API a existência da lista de contatos conforme padrão estabelecido no src/config/index.ts
+Ao iniciar o projeto é consultado via API a existência da lista de contatos conforme padrão estabelecido no ```src/config/index.ts```
 Se a lista não existir, será criada e os contatos importados. Caso já exista a aplicação segue o fluxo normal.
 
-O serviço rodará no endereço ```localhost:3333```. É disponibilizado um endpoint na rota /contacts GET o mesmo fornece a consulta na api do Hubspot
+O serviço rodará no endereço ```localhost:3333```. É disponibilizado um endpoint na rota ```/contacts``` GET o mesmo fornece a consulta na api do Hubspot
 
 
 
