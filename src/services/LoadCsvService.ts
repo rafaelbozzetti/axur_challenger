@@ -17,7 +17,7 @@ class LoadCsvService {
 
         const fileName = config.csv_load_file;
         
-        const filePath = path.resolve(__dirname, '..', 'data' );
+        const filePath = path.resolve(__dirname, '..', '..' );
 
         fs.createReadStream(`${filePath}/${fileName}`)
         .pipe(csv())
