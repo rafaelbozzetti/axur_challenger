@@ -14,7 +14,7 @@ class LoadApiContacts {
         const { listId } = resultContactList;
         const responseAllContacts = await hubspotClient.apiRequest({
           method: 'GET',
-          path: `/contacts/v1/lists/${listId}/contacts/all?hapikey=${config.api_key}&property=email`
+          path: `/contacts/v1/lists/${listId}/contacts/all?hapikey=${config.api_key}&property=email&count=100`
         });
 
         const { contacts } = responseAllContacts.body;
@@ -29,7 +29,7 @@ class LoadApiContacts {
 
         const resultDomains = [];
         for(const k in domains) {
-          resultDomains = {"domain": k, "quantity": domains[k]};
+          resultDomains.push({"domain": k, "quantity": domains[k]});
         }
 
         return resultDomains;
