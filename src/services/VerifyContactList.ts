@@ -1,6 +1,11 @@
 import * as hubspot from '@hubspot/api-client';
 import { config } from '../config';
 
+interface List {
+    name: string;
+    type: string;
+}
+
 class VerifyContactList {
 
     public async execute() {
@@ -16,7 +21,7 @@ class VerifyContactList {
   
             const allLists = response.body.lists;
   
-            const myList = allLists.map(function(list) {
+            const myList = allLists.map(function(list:List) {
                 const regexp = `${config.list_name}`;
                 if(list.name.match(regexp)) {
                     list.type = 'existent';
@@ -47,7 +52,7 @@ class VerifyContactList {
             }
   
         }catch(err) {
-  
+            console.log(err);
         }  
     }
 }

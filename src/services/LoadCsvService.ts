@@ -68,10 +68,7 @@ class LoadCsvService {
                 console.log(err);
             }
 
-        })
-        .on('end', () => {
-            console.log('Importação finalizada');
-        });
+        });        
 
         return true;
     }

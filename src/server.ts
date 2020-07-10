@@ -10,12 +10,16 @@ app.use(express.json());
 const contactList = new VerifyContactList();
 
 contactList.execute().then(function(data) {
+
   const { name, type, listId } = data;
   if(type == 'new') {
-    console.log(`Lista criada! \nId:${listId} Nome:${name}`);
+    console.log(`\nContact list created! \nId:${listId} Name:${name} \n`);
     const loadList = new LoadCsvService();
-    loadList.execute( {listId:listId} );
+    loadList.execute( {listId:listId} ).then(function() {
+      console.log('CSV import finished');
+    });
   }
+
 });
 
 app.get('/contacts', async function(request: Request, response: Response) {
@@ -33,5 +37,5 @@ app.get('/', function(request: Request, response: Response) {
 });
 
 app.listen(3333, () => {
-  console.log("🚀️ Axur server started\n");
+  console.log("🚀️ Axur started\n");
 });

@@ -2,6 +2,21 @@ import * as hubspot from '@hubspot/api-client';
 import { config } from '../config';
 import VerifyContactList from './VerifyContactList';
 
+interface Contact {
+  vid: string;
+  properties: {
+    email: {
+      value: string;
+    }
+  }
+}
+
+interface DomainItem {
+  [index: string]: string;
+}
+
+interface Domain extends Array<DomainItem> { }
+
 class LoadApiContacts {
 
     public async execute() {
@@ -19,12 +34,12 @@ class LoadApiContacts {
 
         const { contacts } = responseAllContacts.body;
 
-        const domains = [];
+        var domains: Domain[] = [];
 
-        contacts.map(async function(contact) {
+        contacts.map(async function(contact:Contact) {
           const email = contact.properties.email.value;
           const domain = email.split('@')[1];
-          domains[domain] = (domains[domain] ? domains[domain] + 1 : 1);
+          domains[domain] = ( domains[domain] ? domains[domain] + 1 : 1 );
         });
 
         const resultDomains = [];
